@@ -24,109 +24,143 @@ const SectionLabel = ({ number, title }) => (
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const links = ['Services', 'Process', 'Portfolio', 'FAQ', 'Contact'];
 
-  return (
-    <nav className="fixed top-0 w-full z-[100] bg-white dark:bg-black border-b border-slate-950/5 dark:border-white/5 transition-colors duration-200 py-6 md:py-8">
-      <div className="max-w-[1700px] mx-auto px-8 md:px-16 flex items-center justify-between">
-        <div className="flex-shrink-0 flex flex-col items-center lg:items-start group cursor-pointer">
-          <span className="text-[15px] font-[900] tracking-[0.4em] uppercase text-slate-950 dark:text-white leading-none">
-            ASHWINI.SURVASE
-          </span>
-          <div className="flex items-center gap-3 mt-3 opacity-30 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all">
-             <div className="h-[1px] w-4 bg-slate-950 dark:bg-white transition-all group-hover:w-8"></div>
-             <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-950 dark:text-white italic">
-               Civil Engineer | Freelance Services
-             </p>
-             <div className="h-[1px] w-4 bg-slate-950 dark:bg-white transition-all group-hover:w-8"></div>
-          </div>
-        </div>
-        
-        <div className="hidden lg:flex items-center space-x-12">
-          {links.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-950/40 hover:text-slate-950 dark:text-white/40 dark:hover:text-white transition-all"
-            >
-              {link}
-            </a>
-          ))}
-          <a
-            href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..."
-            className="text-[10px] border border-slate-950/10 dark:border-white/10 px-6 py-2 tracking-[0.2em] uppercase font-black hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
-          >
-            Hire Specialist
-          </a>
-        </div>
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-        <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-slate-950 dark:text-white transition-transform active:scale-95">
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
+  return (
+    <>
+      <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl py-4 border-b border-slate-950/5' : 'bg-transparent py-8'}`}>
+        <div className="max-w-[1700px] mx-auto px-6 md:px-16 flex items-center justify-between">
+          <div className="flex-shrink-0 flex flex-col group cursor-pointer">
+            <span className="text-[15px] font-[900] tracking-[0.4em] uppercase text-slate-950 dark:text-white leading-none">
+              ASHWINI.SURVASE
+            </span>
+            <div className="hidden sm:flex items-center gap-3 mt-3 opacity-30 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all">
+               <div className="h-[1px] w-4 bg-slate-950 dark:bg-white transition-all group-hover:w-8"></div>
+               <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-950 dark:text-white italic">
+                 Civil Engineer | Freelance Services
+               </p>
+               <div className="h-[1px] w-4 bg-slate-950 dark:bg-white transition-all group-hover:w-8"></div>
+            </div>
+          </div>
+          
+          <div className="hidden lg:flex items-center space-x-12">
+            {links.map((link) => (
+              <a
+                key={link}
+                href={`#${link.toLowerCase()}`}
+                className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-950/40 hover:text-slate-950 dark:text-white/40 dark:hover:text-white transition-all"
+              >
+                {link}
+              </a>
+            ))}
+            <a
+              href="https://wa.me/918767147420"
+              className="text-[10px] bg-slate-950 text-white dark:bg-white dark:text-black px-8 py-3 tracking-[0.2em] uppercase font-black hover:scale-105 transition-all"
+            >
+              Hire Specialist
+            </a>
+          </div>
+
+          <button onClick={() => setIsOpen(true)} className="lg:hidden p-3 bg-slate-950 dark:bg-white text-white dark:text-black rounded-full active:scale-95 transition-transform">
+            <Menu size={20} />
+          </button>
+        </div>
+      </nav>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-black border-b border-slate-950/10 dark:border-white/10 overflow-hidden"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="fixed inset-0 z-[200] bg-white/95 dark:bg-black/95 backdrop-blur-2xl flex flex-col p-8 md:p-16 h-screen w-full"
           >
-            <div className="flex flex-col p-12 space-y-10">
-              {links.map((link) => (
-                <a
+            <div className="flex justify-between items-center mb-24">
+               <span className="text-[10px] font-black tracking-[0.4em] opacity-30 text-slate-950 dark:text-white uppercase">Menu System</span>
+               <button onClick={() => setIsOpen(false)} className="p-4 bg-slate-950 dark:bg-white text-white dark:text-black rounded-full">
+                 <X size={24} />
+               </button>
+            </div>
+            
+            <div className="flex flex-col space-y-6">
+              {links.map((link, i) => (
+                <motion.a
                   key={link}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                   href={`#${link.toLowerCase()}`}
                   onClick={() => setIsOpen(false)}
-                  className="text-4xl font-black uppercase tracking-tighter text-slate-950 dark:text-white"
+                  className="text-5xl md:text-8xl font-black uppercase tracking-tighter hover:italic transition-all dark:text-white"
                 >
                   {link}
-                </a>
+                </motion.a>
               ))}
-              <a href="https://wa.me/918767147420" className="text-2xl font-black uppercase text-slate-950 dark:text-white">Start Project</a>
+              <motion.a
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                href="https://wa.me/918767147420"
+                className="inline-block text-lg font-black uppercase tracking-[0.4em] bg-slate-950 text-white dark:bg-white dark:text-black px-12 py-6 mt-12 text-center"
+              >
+                Hire Specialist
+              </motion.a>
+            </div>
+            
+            <div className="mt-auto pt-12 border-t border-slate-950/5">
+              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-950/20 dark:text-white/20 italic">
+                Independent Drafting • Pune • Latur • Maharashtra
+              </p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 
 const Hero = () => (
-  <header className="relative min-h-screen flex flex-col justify-center pt-32 pb-20 border-b border-slate-950/5 dark:border-white/5">
-    <div className="max-w-[1700px] mx-auto px-8 md:px-16 w-full">
+  <header className="relative min-h-screen flex flex-col justify-center pt-32 pb-20 border-b border-slate-950/5 dark:border-white/5 overflow-hidden">
+    <div className="max-w-[1700px] mx-auto px-6 md:px-16 w-full">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="flex items-center gap-4 mb-12">
-           <Globe size={14} className="text-slate-200" />
-           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-950/40 dark:text-white/40 italic">
-             Independent Civil Drafting • Pune • Latur • Maharashtra
+        <div className="flex items-center gap-4 mb-10">
+           <Globe size={14} className="text-slate-400" />
+           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-950/40 dark:text-white/40 italic">
+             Independent Drafting • Pune • Latur
            </p>
         </div>
-        <h1 className="text-6xl md:text-8xl lg:text-[140px] font-black tracking-[-0.05em] leading-[0.85] mb-16 uppercase dark:text-white">
+        <h1 className="text-[13vw] md:text-8xl lg:text-[140px] font-black tracking-[-0.05em] leading-[0.85] mb-16 uppercase dark:text-white">
           Civil <br />
           Engineering <br />
-          <span className="opacity-10 translate-x-12 inline-block italic">Maharashtra.</span> <br />
+          <span className="opacity-10 translate-x-2 md:translate-x-8 inline-block italic">Maharashtra.</span> <br />
         </h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-[1700px] items-end">
           <div className="lg:col-span-7">
-            <p className="text-xl md:text-2xl text-slate-950/60 dark:text-white/60 font-medium leading-[1.3] max-w-2xl mb-12">
-              Professional freelance services including <span className="text-slate-950 dark:text-white font-bold">AutoCAD Drafting, House Planning, and BOQ Estimation</span>. Serving clients across Pune, Latur, and Pimpri Chinchwad with technical accuracy.
+            <p className="text-lg md:text-2xl text-slate-950/60 dark:text-white/60 font-medium leading-[1.5] max-w-2xl mb-12">
+              Providing <span className="text-slate-950 dark:text-white font-bold">AutoCAD Drafting, House Planning, and BOQ Estimation</span>. Serving Pune, Latur, and PCMC with technical accuracy.
             </p>
-            <div className="flex flex-wrap items-center gap-12">
-              <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="text-[10px] font-black uppercase tracking-[0.4em] bg-slate-950 text-white dark:bg-white dark:text-slate-950 px-12 py-6 hover:translate-x-1 transition-transform">Discuss a Project</a>
-              <a href="#portfolio" className="text-[10px] font-black uppercase tracking-[0.4em] border-b border-slate-950/20 pb-1 italic leading-none">View Archive</a>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 md:gap-14">
+              <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="w-full sm:w-auto text-center text-[11px] font-black uppercase tracking-[0.4em] bg-slate-950 text-white dark:bg-white dark:text-slate-950 px-12 py-6 hover:translate-x-2 transition-transform shadow-lg">Discuss a Project</a>
+              <a href="#portfolio" className="text-[11px] font-black uppercase tracking-[0.4em] border-b border-slate-950/20 pb-2 italic">View Archive</a>
             </div>
           </div>
           <div className="lg:col-span-5 hidden lg:flex justify-end pr-10">
              <div className="text-right">
-                <p className="text-4xl font-black uppercase italic dark:text-white mb-2 leading-none">Pune Based</p>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-950/20 dark:text-white/20 italic">Accurate | Affordable | Local</p>
+                <p className="text-5xl font-black uppercase italic dark:text-white mb-4 leading-none">Pune Based</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-950/20 dark:text-white/20 italic">Accurate | Technical | Local</p>
              </div>
           </div>
         </div>
@@ -144,23 +178,23 @@ const Capabilities = () => {
   ];
 
   return (
-    <section id="services" className="py-40 border-b border-slate-950/5 dark:border-white/5">
+    <section id="services" className="py-24 md:py-40 border-b border-slate-950/5 dark:border-white/5">
       <div className="max-w-[1700px] mx-auto">
         <SectionLabel number="01" title="Specialized Local Services" />
-        <div className="px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24">
           {services.map((s, i) => (
             <div key={i} className="group cursor-default">
-              <div className="inline-block px-3 py-1 bg-slate-950/5 dark:bg-white/5 rounded-full mb-8">
-                 <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-950 dark:group-hover:text-white transition-colors italic">{s.tag}</p>
+              <div className="inline-block px-4 py-2 bg-slate-950/5 dark:bg-white/5 rounded-full mb-8">
+                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-950 dark:group-hover:text-white transition-colors italic">{s.tag}</p>
               </div>
               <h2 className="text-3xl font-black uppercase italic tracking-tighter dark:text-white leading-[1.1] mb-6">
                 {s.title}
               </h2>
-              <p className="text-sm text-slate-950/40 dark:text-white/40 font-medium leading-relaxed mb-8">
+              <p className="text-base text-slate-950/40 dark:text-white/40 font-medium leading-relaxed mb-8">
                 {s.desc}
               </p>
-              <a href="https://wa.me/918767147420" className="text-[9px] font-black uppercase tracking-[0.3em] inline-flex items-center gap-3 hover:translate-x-1 transition-all italic leading-none">
-                 Request Local Rate <ArrowRight size={12} />
+              <a href="https://wa.me/918767147420" className="text-[10px] font-black uppercase tracking-[0.3em] inline-flex items-center gap-3 hover:translate-x-2 transition-all italic leading-none">
+                 Request Local Rate <ArrowRight size={14} />
               </a>
             </div>
           ))}
@@ -179,18 +213,18 @@ const Workflow = () => {
   ];
 
   return (
-    <section id="process" className="py-40 bg-slate-50 dark:bg-[#080808] border-b border-slate-950/5 dark:border-white/5">
+    <section id="process" className="py-24 md:py-40 bg-slate-50 dark:bg-[#080808] border-b border-slate-950/5 dark:border-white/5">
       <div className="max-w-[1700px] mx-auto">
         <SectionLabel number="02" title="The Project Lifecycle" />
-        <div className="px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10">
+        <div className="px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10">
           {steps.map((step) => (
-            <div key={step.id} className="bg-white dark:bg-black p-12 hover:bg-slate-50 dark:hover:bg-white/5 transition-all group">
+            <div key={step.id} className="bg-white dark:bg-black p-10 md:p-14 hover:bg-slate-50 dark:hover:bg-white/5 transition-all group">
               <div className="text-slate-900 dark:text-white mb-10 group-hover:translate-x-2 transition-transform">
                  {step.icon}
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 mb-4 italic">Phase {step.id}</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-300 mb-6 italic">Phase {step.id}</p>
               <h4 className="text-2xl font-black uppercase dark:text-white tracking-tighter italic mb-6">{step.title}</h4>
-              <p className="text-sm text-slate-500 font-medium leading-relaxed">{step.desc}</p>
+              <p className="text-base text-slate-500 font-medium leading-relaxed">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -208,11 +242,11 @@ const PortfolioGallery = () => {
   ];
 
   return (
-    <section id="portfolio" className="py-40 relative">
-      <div className="max-w-[1700px] mx-auto px-8 md:px-16">
+    <section id="portfolio" className="py-24 md:py-40 relative overflow-hidden">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-16">
         <SectionLabel number="03" title="Selected Archive" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
           {projects.map((proj, i) => (
             <motion.div
               key={i}
@@ -221,14 +255,14 @@ const PortfolioGallery = () => {
                <div className="aspect-[16/10] overflow-hidden mb-12 grayscale hover:grayscale-0 transition-all duration-1000">
                   <img src={proj.img} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
                </div>
-               <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+               <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
                  <div>
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 italic mb-4 block">
                       GEO Archive: {proj.category}
                     </span>
-                    <h4 className="text-4xl font-black uppercase dark:text-white tracking-tighter italic leading-none">{proj.title}</h4>
+                    <h4 className="text-3xl md:text-4xl font-black uppercase dark:text-white tracking-tighter italic leading-none">{proj.title}</h4>
                  </div>
-                 <a href="https://wa.me/918767147420" className="text-[10px] font-black uppercase tracking-[0.3em] border border-slate-950/10 p-4 hover:bg-slate-950 hover:text-white dark:border-white/10 dark:hover:bg-white dark:hover:text-black transition-all italic leading-none">Details</a>
+                 <a href="https://wa.me/918767147420" className="w-full md:w-auto text-center text-[11px] font-black uppercase tracking-[0.3em] border border-slate-950/10 p-4 hover:bg-slate-950 hover:text-white dark:border-white/10 dark:hover:bg-white dark:hover:text-black transition-all italic leading-none">Execute Details</a>
                </div>
             </motion.div>
           ))}
@@ -254,39 +288,42 @@ const FAQSection = () => {
   ];
 
   return (
-    <section id="faq" className="py-40 bg-slate-50 dark:bg-[#080808] border-b border-slate-950/5 dark:border-white/5">
-      <div className="max-w-[1700px] mx-auto px-8 md:px-16">
+    <section id="faq" className="py-24 md:py-40 bg-slate-50 dark:bg-[#080808] border-b border-slate-950/5 dark:border-white/5 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+         <h2 className="text-[50vw] font-black uppercase italic leading-none whitespace-nowrap">AEO HUB</h2>
+      </div>
+      <div className="max-w-[1700px] mx-auto px-6 md:px-16 relative z-10">
         <SectionLabel number="04" title="Answer Engine Optimization" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
           <div className="lg:col-span-12">
              {faqs.map((faq, index) => (
-               <div key={index} className="border-b border-slate-200 dark:border-white/10 last:border-0 hover:bg-white/20 transition-all">
-                 <button 
-                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                   className="w-full flex items-center justify-between py-12 text-left group"
-                 >
-                   <h3 className="text-2xl font-black uppercase italic dark:text-white tracking-tighter group-hover:translate-x-2 transition-transform">
-                      {faq.q}
-                   </h3>
-                   <div className="p-4 border border-slate-950/5 dark:border-white/10 rounded-full">
-                      {openIndex === index ? <Minus size={16} /> : <Plus size={16} />}
-                   </div>
-                 </button>
-                 <AnimatePresence>
-                   {openIndex === index && (
-                     <motion.div
-                       initial={{ height: 0, opacity: 0 }}
-                       animate={{ height: 'auto', opacity: 1 }}
-                       exit={{ height: 0, opacity: 0 }}
-                       className="overflow-hidden"
-                     >
-                       <p className="pb-12 text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-4xl italic px-4">
-                         {faq.a}
-                       </p>
-                     </motion.div>
-                   )}
-                 </AnimatePresence>
-               </div>
+                <div key={index} className="border-b border-slate-200 dark:border-white/10 last:border-0 hover:bg-white dark:hover:bg-white/5 transition-all">
+                  <button 
+                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                    className="w-full flex items-center justify-between py-10 px-4 text-left group"
+                  >
+                    <h3 className="text-lg md:text-2xl font-black uppercase italic dark:text-white tracking-tighter group-hover:translate-x-4 transition-transform max-w-3xl leading-tight">
+                       {faq.q}
+                    </h3>
+                    <div className="p-4 border border-slate-950/5 dark:border-white/10 rounded-full bg-slate-50 dark:bg-transparent scale-75 md:scale-100">
+                       {openIndex === index ? <Minus size={18} /> : <Plus size={18} />}
+                    </div>
+                  </button>
+                  <AnimatePresence>
+                    {openIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-12 pt-2 text-base md:text-lg text-slate-500 dark:text-slate-400 font-medium leading-[1.6] max-w-4xl italic px-8">
+                          {faq.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
              ))}
           </div>
         </div>
@@ -296,19 +333,19 @@ const FAQSection = () => {
 };
 
 const AboutSection = () => (
-  <section id="about" className="py-40 bg-slate-950 text-white dark:bg-white dark:text-slate-950 relative overflow-hidden">
-    <div className="max-w-[1700px] mx-auto px-8 md:px-16">
+  <section id="about" className="py-24 md:py-40 bg-slate-950 text-white dark:bg-white dark:text-slate-950 relative overflow-hidden">
+    <div className="max-w-[1700px] mx-auto px-6 md:px-16">
       <SectionLabel number="05" title="Local Market Integrity" />
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32">
         <div className="lg:col-span-8">
-           <h2 className="text-5xl md:text-8xl font-black uppercase leading-[0.9] tracking-[-0.03em] italic mb-16">
-              Ashwini <br />Survase <br /><span className="opacity-20 inline-block translate-x-12">Pune | Latur.</span>
+           <h2 className="text-[12vw] md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-[-0.03em] italic mb-16">
+              Ashwini <br />Survase <br /><span className="opacity-20 inline-block translate-x-4">Pune | Latur.</span>
            </h2>
            <div className="space-y-10 max-w-3xl">
-              <p className="text-2xl text-white/60 dark:text-slate-950/60 font-medium leading-[1.3]">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/60 dark:text-slate-950/60 font-medium leading-[1.4]">
                 I bridge the gap between design vision and construction reality. With local expertise in **Pune** and **Latur**, I understand the regional drafting requirements (PMC/PCMC/LUR) ensuring accurate project execution across **Maharashtra**.
               </p>
-              <div className="flex flex-wrap gap-12 pt-10">
+              <div className="flex flex-wrap gap-12 pt-6">
                  {[
                    { label: 'Market Precision', val: 'Pune/Latur' },
                    { label: 'Technical Accuracy', val: '99.9%' },
@@ -316,18 +353,18 @@ const AboutSection = () => (
                  ].map((stat, i) => (
                    <div key={i}>
                       <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 mb-4 italic">[{stat.label}]</p>
-                      <p className="text-4xl font-black italic tracking-tighter">{stat.val}</p>
+                      <p className="text-3xl md:text-5xl font-black italic tracking-tighter">{stat.val}</p>
                    </div>
                  ))}
               </div>
            </div>
         </div>
         <div className="lg:col-span-4 flex flex-col justify-end">
-           <div className="p-16 border border-white/10 dark:border-slate-950/10 flex flex-col justify-between hover:bg-white/5 dark:hover:bg-slate-950/5 transition-all group">
-              <User size={60} className="mb-20 text-white dark:text-slate-950 group-hover:scale-110 transition-transform" />
+           <div className="p-12 border border-white/10 dark:border-slate-950/10 flex flex-col justify-between hover:bg-white/5 dark:hover:bg-slate-950/5 transition-all group aspect-square">
+              <User size={60} className="mb-12 text-white dark:text-slate-950 group-hover:rotate-6 transition-transform" />
               <div>
-                 <p className="text-xs font-black uppercase tracking-[0.4em] mb-4 opacity-40">Identity Check</p>
-                 <p className="text-3xl font-black uppercase dark:text-slate-950 tracking-tighter italic">Ashwini Survase</p>
+                 <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-4 opacity-40">Identity Check</p>
+                 <p className="text-3xl font-black uppercase dark:text-slate-950 tracking-tighter italic leading-none">Ashwini Survase</p>
                  <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4 opacity-20 italic">The Freelance Standard</p>
               </div>
            </div>
@@ -338,55 +375,62 @@ const AboutSection = () => (
 );
 
 const ContactSection = () => (
-  <section id="contact" className="py-40 bg-white dark:bg-black relative overflow-hidden">
-    <div className="max-w-[1700px] mx-auto px-8 md:px-16 text-center">
+  <section id="contact" className="py-24 md:py-40 bg-white dark:bg-black relative overflow-hidden">
+    <div className="max-w-[1700px] mx-auto px-6 md:px-16 text-center">
        <span className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-300 mb-12 block italic">Engagement Hub</span>
-       <h2 className="text-6xl md:text-9xl lg:text-[140px] font-black text-slate-950 dark:text-white tracking-[-0.05em] leading-[0.85] mb-24 uppercase italic transition-all hover:tracking-tighter">
+       <h2 className="text-6xl md:text-9xl lg:text-[140px] font-black text-slate-950 dark:text-white tracking-[-0.05em] leading-[0.85] mb-20 uppercase italic transition-all hover:tracking-tighter">
          Request <br />A <span className="text-slate-400">Quote.</span>
        </h2>
        
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto mb-24">
-          <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="p-16 border border-slate-950/10 dark:border-white/10 hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group">
-             <MessageCircle size={40} className="mb-10 mx-auto group-hover:scale-110 transition-transform" />
-             <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 text-slate-500 italic">WhatsApp Lead Protocol</p>
-             <p className="text-3xl font-black italic tracking-tighter transition-all group-hover:tracking-tighter">+91 8767147420</p>
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto mb-20">
+          <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="p-12 md:p-16 border border-slate-950/10 dark:border-white/10 hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group">
+             <MessageCircle size={40} className="mb-8 mx-auto group-hover:scale-110 transition-transform" />
+             <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 text-slate-500 italic">WhatsApp Protocol</p>
+             <p className="text-2xl md:text-3xl font-black italic tracking-tighter">+91 8767147420</p>
           </a>
-          <a href="mailto:survaseashwini878@gmail.com" className="p-16 border border-slate-950/10 dark:border-white/10 hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group">
-             <Mail size={40} className="mb-10 mx-auto group-hover:scale-110 transition-transform" />
+          <a href="mailto:survaseashwini878@gmail.com" className="p-12 md:p-16 border border-slate-950/10 dark:border-white/10 hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group overflow-hidden">
+             <Mail size={40} className="mb-8 mx-auto group-hover:scale-110 transition-transform" />
              <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 text-slate-400 italic">Email Register</p>
-             <p className="text-lg md:text-xl font-black tracking-tight whitespace-nowrap overflow-hidden text-ellipsis px-2">survaseashwini878@gmail.com</p>
+             <p className="text-base md:text-lg font-black tracking-tight truncate px-4">survaseashwini878@gmail.com</p>
           </a>
        </div>
        
-       <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="text-[11px] font-black tracking-[0.4em] uppercase bg-black text-white dark:bg-white dark:text-black px-16 py-8 hover:translate-x-1 transition-transform inline-block italic leading-none">Execute Project Invite</a>
+       <a href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..." className="text-[11px] font-black tracking-[0.5em] uppercase bg-black text-white dark:bg-white dark:text-black px-16 py-8 hover:translate-x-2 transition-transform inline-block italic leading-none active:scale-95 shadow-xl">Execute Project Invite</a>
     </div>
   </section>
 );
 
 const Footer = () => (
-  <footer className="py-20 border-t border-slate-950/5 dark:border-white/5 bg-slate-50 dark:bg-black w-full overflow-x-hidden">
-    <div className="max-w-[1700px] mx-auto px-8 md:px-16 flex flex-col lg:flex-row justify-between items-center gap-12">
-      <div className="text-center lg:text-left">
-        <p className="text-sm font-black uppercase italic tracking-[0.4em] dark:text-white leading-none">ashwini.survase</p>
-        <p className="text-[10px] font-medium text-slate-400 mt-4 tracking-widest uppercase italic leading-none">Pune • Latur • Maharashtra Civil Specialist</p>
+  <footer className="py-20 md:py-32 border-t border-slate-950/10 dark:border-white/10 bg-white dark:bg-black w-full overflow-hidden">
+    <div className="max-w-[1700px] mx-auto px-6 md:px-16 flex flex-col lg:flex-row justify-between items-center gap-12 md:gap-20">
+      <div className="text-center lg:text-left w-full lg:w-auto">
+        <p className="text-xl md:text-2xl font-black uppercase italic tracking-[0.3em] md:tracking-[0.4em] text-slate-950 dark:text-white leading-none mb-3 truncate">ashwini.survase</p>
+        <p className="text-[10px] md:text-[11px] font-bold text-slate-500 tracking-widest uppercase italic leading-none px-4 lg:px-0">Pune • Latur • Maharashtra Civil Specialist</p>
       </div>
       
-      <div className="flex space-x-12">
+      <div className="flex flex-wrap justify-center gap-6 md:gap-16">
         {['Archive', 'Contact', 'Systems'].map((item) => (
-          <a key={item} href="#" className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300 hover:text-slate-950 dark:hover:text-white transition-all italic leading-none">{item}</a>
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-slate-400 hover:text-slate-950 dark:hover:text-white transition-all italic leading-none">{item}</a>
         ))}
       </div>
       
-      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-200 dark:text-white/5 italic">
-        © 2024 FREELANCE ARCHIVE AS. ALL RIGHTS SECURED.
-      </p>
+      <div className="text-center lg:text-right w-full lg:w-auto flex flex-col items-center lg:items-end">
+        <div className="inline-block px-5 py-2.5 bg-slate-950 dark:bg-white mb-4 shadow-xl">
+           <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] text-white dark:text-black italic leading-none">
+             ALL RIGHTS RESERVED.
+           </p>
+        </div>
+        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 italic block">
+          © 2024 FREELANCE ARCHIVE AS.
+        </p>
+      </div>
     </div>
   </footer>
 );
 
 export default function App() {
   return (
-    <div className="selection:bg-slate-950 selection:text-white dark:selection:bg-white dark:selection:text-slate-950 overflow-x-hidden w-full">
+    <div className="selection:bg-slate-950 selection:text-white dark:selection:bg-white dark:selection:text-slate-950 overflow-x-hidden w-full bg-white dark:bg-black">
       <Navbar />
       <Hero />
       <Capabilities />
@@ -402,7 +446,7 @@ export default function App() {
         href="https://wa.me/918767147420?text=Hello%20Ashwini,%20I'd%20like%20to%20discuss%20a%20new%20drafting%20project..."
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-10 right-10 z-[110] w-16 h-16 bg-slate-950 text-white dark:bg-white dark:text-slate-950 rounded-full flex items-center justify-center shadow-2xl transition-colors border-2 border-slate-800 dark:border-slate-200"
+        className="fixed bottom-10 right-6 md:right-10 z-[110] w-14 h-14 md:w-16 md:h-16 bg-slate-950 text-white dark:bg-white dark:text-slate-950 rounded-full flex items-center justify-center shadow-2xl transition-colors border-2 border-slate-800 dark:border-slate-200"
       >
         <MessageCircle size={24} />
       </motion.a>
