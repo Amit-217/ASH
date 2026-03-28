@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-technical: "Manrope", var(--font-sans);
+  
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  
+  --radius-none: 0px;
+}
+
+@layer base {
+  :root {
+    scroll-behavior: smooth;
+    color-scheme: light dark;
+  }
+  
+  body {
+    @apply font-sans antialiased bg-paper text-ink transition-colors duration-200 
+           dark:bg-ink dark:text-paper;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tight leading-tight;
+  }
+}
+
+@layer components {
+  /* Zero-Style Minimalist Divider */
+  .zero-line {
+    @apply border-t border-ink/10 dark:border-paper/10 w-full;
+  }
+
+  /* Zero-Style Navigation Links */
+  .zero-nav-link {
+    @apply text-[11px] font-bold uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity;
+  }
+
+  /* Professional Drafting Section Header */
+  .zero-section-label {
+    @apply text-[9px] font-bold uppercase tracking-[0.4em] mb-12 flex items-center gap-6;
+  }
+
+  /* Architectural Grid separation (Pure Lines, no space) */
+  .zero-grid-item {
+    @apply p-12 border border-ink/10 dark:border-paper/10 relative;
+  }
+
+  /* The "Zero" Button */
+  .btn-zero {
+    @apply inline-flex items-center justify-center px-10 py-5 bg-ink text-paper dark:bg-paper dark:text-ink 
+           text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:bg-ink/90 dark:hover:bg-paper/90;
+  }
+  
+  .btn-zero-outline {
+    @apply inline-flex items-center justify-center px-10 py-5 border border-ink dark:border-paper bg-transparent 
+           text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-ink hover:text-paper 
+           dark:hover:bg-paper dark:hover:text-ink;
+  }
+
+  /* Technical List (Services) */
+  .zero-list-item {
+    @apply grid grid-cols-12 py-16 border-b border-ink/10 dark:border-paper/10 transition-colors hover:bg-slate-50 dark:hover:bg-white/5;
+  }
+}
